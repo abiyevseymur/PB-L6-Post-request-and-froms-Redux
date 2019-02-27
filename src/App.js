@@ -1,28 +1,75 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route } from 'react-router-dom'
+import NavBar from './components/NavBar';
+import Form from './components/Form';
+import PostList from './components/postsList';
+import { connect } from 'react-redux';
+import { loadPosts, getPostId, newPost } from './actions'
+import PostDetails from './components/postDetails';
+
 
 class App extends Component {
+  state = {
+    userId: 11,
+    title: null,
+    body: null
+  }
+  componentDidMount() {
+    this.props.loadPosts()
+    this.props.getPostId()
+  }
+
+  getTitle = (title) => {
+    this.setState({
+      title: title
+    })
+    
+    
+
+  }
+  getBody = (body) => {
+    this.setState({
+      body: body
+    })
+  }
+  submitFrom = () => {
+    this.props.newPost(this.state)
+  }
+
+
+ 
+
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+    console.log(this.state.title)
+    return (<BrowserRouter>
+      <div className="ui grid">
+        <NavBar />
+        <div className="twelve wide stretched column">
+          <div className="ui segment">
+            <Route path='/' exact render={() => <Form
+              title={this.getTitle}
+              body={this.getBody}
+              submitted={this.submitFrom} />} />
+
+            <Route path='/list' render={() => <PostList
+              posts={this.props.posts}
+              loading={this.props.posts.isLoading}
+              getId={this.props.getPostId} />} />
+
+            <Route path='/details/' render={() => <PostDetails
+              details={this.props.postDetails} />} />
+          </div>
+        </div>
       </div>
+    </BrowserRouter>
     );
   }
 }
+function mapStateToProps(store) {
 
-export default App;
+  return {
+    posts: store.posts,
+    postDetails: store.postDetails
+  }
+}
+export default connect(mapStateToProps, { loadPosts, getPostId, newPost })(App);
