@@ -15,9 +15,11 @@ const Form = props => {
     }
     let onSubmitBtn = () =>{
         props.submitted()
+        newBodyElement.current.value = ""
+        newTitleElement.current.value = ""
     }
 
-    return (
+      return (
         <div className="ui form">
             <div className="field">
                 <label >Title</label>
@@ -27,9 +29,8 @@ const Form = props => {
                 <label>Post</label>
                 <textarea  onChange={onBodyChange}  ref={newBodyElement}></textarea>
             </div>
-
-            <Link to = "/list" className="item">
-            <div className="ui submit button" onClick={onSubmitBtn} >Submit</div>
+            <Link to = "/list" >
+            <button className="ui submit button" onClick={onSubmitBtn}  >Submit</button>
             </Link>
            
         </div>
