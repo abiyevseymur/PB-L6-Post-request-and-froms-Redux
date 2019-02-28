@@ -4,7 +4,7 @@ import NavBar from './components/NavBar';
 import Form from './components/Form';
 import PostList from './components/postsList';
 import { connect } from 'react-redux';
-import { loadPosts,  newPost } from './actions'
+import { loadPosts, newPost } from './actions'
 import PostDetails from './components/postDetails';
 import NotFound from './components/NotFound'
 
@@ -14,19 +14,47 @@ class App extends Component {
       userId: 11,
       title: null,
       body: null,
+
     },
-    validation:{
-      succes:null
+    validation: {
+      submitted: false, 
+      success: false,
+      error: { title: null, body: null }
     }
 
   }
   componentDidMount() {
     this.props.loadPosts()
   }
-  
 
-  // onPostChange function
+  componentDidUpdate() {
+    //create new POST element
+    if (this.state.validation.submitted) {
+      this.props.newPost(this.state.newPost)
+      //old state null
+      this.setState({
+        newPost: {
+          title: null,
+          body: null,
+        },
+        validation: {
+          submitted: false,
+          success: false,
+          error: { title: null, body: null }
+        }
+      })
+    }
+  }
+
+  // onPostChange function Validations
   setNewPost = (title, body) => {
+    if (this.state.newPost.title === null || this.state.newPost.title.length < 3)
+      this.setState({ validation: { error: { title: ("The title lenght must be more than 3") } } })
+    else if (this.state.newPost.body === null || this.state.newPost.body.length < 10)
+      this.setState({ validation: { error: { body: ("The text message must be more than 10") } } })
+    else
+      this.setState({ validation: { error: { title: null, body: null } , success: true }})
+
     this.setState({
       newPost: {
         title: title,
@@ -35,25 +63,17 @@ class App extends Component {
     })
   }
 
-
-  //all validation when submit button pressed
+  //validations here
   submitFrom = () => {
-    if (this.state.newPost.title === null || this.state.newPost.title.length < 3)
-      alert("The title lenght must be more than 3")
-    else if (this.state.newPost.body === null || this.state.newPost.body.length < 10)
-      alert("The text message must be more than 10")
-    else {
-      this.props.newPost(this.state.newPost)
+    if (this.state.validation.success) {
       this.setState({
-        newPost: {
-          title: null,
-          body: null,
+        validation: {
+          submitted: true
         }
       })
+      alert("Message was added")
     }
   }
-
-
 
 
   render() {
@@ -68,7 +88,7 @@ class App extends Component {
               <Route path='/' exact render={() => <Form
                 setNewPost={this.setNewPost}
                 submitted={this.submitFrom}
-                onSucces={this.fillForm} />} />
+                error={this.state.validation.error} />} />
 
               <Route path='/list' exact render={() => <PostList
                 posts={this.props.posts}
