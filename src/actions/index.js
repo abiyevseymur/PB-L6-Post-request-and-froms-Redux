@@ -1,4 +1,4 @@
-import { jsonPlaceHolder, jsonPlaceHolderPOST } from './../api/jsonplaceholder'
+import { jsonPlaceHolder } from './../api/jsonplaceholder'
 import { SET_POSTS_DATA, REQUEST_POSTS,  CREATE_POST } from '../constants/constats';
 
 export const loadPosts = () => dispatch => {
@@ -10,17 +10,12 @@ export const loadPosts = () => dispatch => {
             }))
     dispatch({ type: REQUEST_POSTS })
 }
-
 export const newPost=(postData)=>async dispatch=>{
-       await jsonPlaceHolderPOST.post('/posts',postData)
+       await jsonPlaceHolder.post('/posts',postData)
        .then(response =>
         dispatch({
             type: CREATE_POST,
             payload: response.data,
         }))
-        
-        
-
-
 }
 

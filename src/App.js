@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import {  Route, Switch } from 'react-router-dom'
 import NavBar from './components/NavBar';
 import Form from './components/Form';
 import PostList from './components/postsList';
@@ -72,13 +72,13 @@ class App extends Component {
         }
       })
       alert("Message was added")
+      this.props.history.push("/list")
     }
   }
 
 
   render() {
-    console.log()
-    return (<BrowserRouter>
+    return (
       <div className="ui grid">
         <NavBar />
         <div className="twelve wide stretched column">
@@ -102,7 +102,6 @@ class App extends Component {
           </div>
         </div>
       </div>
-    </BrowserRouter>
     );
   }
 }
