@@ -17,7 +17,8 @@ export const postReducer = (state = intialState, action) => {
 
         case CREATE_POST:
             return {
-                posts:[...state.posts.concat(action.payload)],
+                ...state,
+                posts:[...state.posts,action.payload],
                 isLoading: false
             }
         case REQUEST_POSTS:

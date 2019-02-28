@@ -7,7 +7,7 @@ const NavBar =()=>{
          <div className="four wide column">
           <div className="ui vertical fluid tabular menu">
             <NavLink to = "/" exact className="item" activeClassName = "active">
-              AddNew
+              Add New
               </NavLink>
             <NavLink to = "/list" className="item" activeClassName = "active">
               List
